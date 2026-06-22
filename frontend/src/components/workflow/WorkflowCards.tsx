@@ -1,14 +1,8 @@
 import { workflowStages } from "@/lib/constants";
 import type { StageId } from "@/lib/constants";
 import { useAppStore } from "@/store/app-store";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Check, ChevronRight } from "lucide-react";
 import type { ViewId } from "@/types";
 
 const stageToView: Record<StageId, ViewId> = {
@@ -28,39 +22,59 @@ export function WorkflowCards() {
     return "read";
   })();
 
+  const currentIndex = workflowStages.findIndex((s) => s.id === currentStage);
+
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {workflowStages.map((stage) => {
-        const active = stage.id === currentStage;
-        return (
-          <button
-            key={stage.id}
-            type="button"
-            onClick={() => setCurrentView(stageToView[stage.id])}
-            className={cn(
-              "relative flex items-center gap-2 rounded-md border px-3 py-2 text-left transition-all",
-              active
-                ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                : "border-border bg-card text-foreground hover:bg-accent/50"
-            )}
-          >
-            <span
-              className={cn(
-                "flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold",
-                active
-                  ? "bg-primary-foreground text-primary"
-                  : "bg-muted text-muted-foreground"
+    <div className="rounded-lg border bg-card p-2">
+      <div className="flex items-center justify-between gap-1">
+        {workflowStages.map((stage, index) => {
+          const active = stage.id === currentStage;
+          const completed = index < currentIndex;
+          const isLast = index === workflowStages.length - 1;
+
+          return (
+            <div key={stage.id} className="flex flex-1 items-center">
+              <button
+                type="button"
+                onClick={() => setCurrentView(stageToView[stage.id])}
+                className={cn(
+                  "group flex flex-1 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors",
+                  active
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold",
+                    active
+                      ? "bg-primary text-primary-foreground"
+                      : completed
+                        ? "bg-primary/80 text-primary-foreground"
+                        : "border border-muted-foreground/30 text-muted-foreground"
+                  )}
+                >
+                  {completed ? <Check size={10} /> : stage.step}
+                </span>
+                <div className="min-w-0">
+                  <div className={cn("text-xs font-medium", active && "text-primary")}>
+                    {stage.title}
+                  </div>
+                  <div className="hidden text-[10px] text-muted-foreground sm:block">
+                    {stage.description}
+                  </div>
+                </div>
+              </button>
+              {!isLast && (
+                <ChevronRight
+                  size={14}
+                  className="mx-1 shrink-0 text-muted-foreground/40"
+                />
               )}
-            >
-              {stage.step}
-            </span>
-            <span className="text-xs font-medium">{stage.title}</span>
-            {active && (
-              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-primary-foreground" />
-            )}
-          </button>
-        );
-      })}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

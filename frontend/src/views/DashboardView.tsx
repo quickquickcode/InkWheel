@@ -47,8 +47,9 @@ export function DashboardView() {
   const articleId = selectedArticleId ?? articles[0]?.id;
 
   const activePost = getActivePost();
-  const usedLlm = activePost ? store.usedLlmByPost[activePost.id] ?? activePost.used_llm : false;
-  const previewVariant = activePost?.variants.find((v) => v.platform === previewPlatform);
+  const usedLlm = activePost
+    ? store.usedLlmByPost[activePost.id] ?? activePost.used_llm
+    : false;
 
   const handleCollect = () => {
     if (!topicId) return;
@@ -67,87 +68,133 @@ export function DashboardView() {
 
   return (
     <div className="space-y-3">
-      {/* Top: workflow + actions + right panel */}
-      <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-12 lg:col-span-8 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border bg-card p-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold">仪表盘</h2>
-              <span className="text-[10px] text-muted-foreground">工作流总览</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <LlmToggle />
-              <Button size="sm" onClick={handleCollect} disabled={collecting || !topicId}>
-                {collecting ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
-                采集
-              </Button>
-              <Button size="sm" variant="secondary" onClick={handleAnalyze} disabled={analyzing || !articleId}>
-                {analyzing ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
-                AI 分析
-              </Button>
-              <Button size="sm" onClick={handleGenerate} disabled={generating || !articleId}>
-                {generating ? <Loader2 size={13} className="animate-spin" /> : <Wand2 size={13} />}
-                生成
-              </Button>
-            </div>
-          </div>
-          <WorkflowCards />
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-card p-3">
+        <div className="flex items-center gap-2">
+          <h2 className="text-base font-semibold">仪表盘</h2>
+          <span className="text-xs text-muted-foreground">工作流总览</span>
         </div>
-        <div className="col-span-12 lg:col-span-4 flex flex-col gap-3">
-          <SystemStatus />
-          <SourceFilter rssSources={rssSources} />
+        <div className="flex flex-wrap items-center gap-2">
+          <LlmToggle />
+          <Button
+            size="sm"
+            onClick={handleCollect}
+            disabled={collecting || !topicId}
+          >
+            {collecting ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <Download size={13} />
+            )}
+            采集
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={handleAnalyze}
+            disabled={analyzing || !articleId}
+          >
+            {analyzing ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <Sparkles size={13} />
+            )}
+            AI 分析
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleGenerate}
+            disabled={generating || !articleId}
+          >
+            {generating ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <Wand2 size={13} />
+            )}
+            生成
+          </Button>
         </div>
       </div>
 
-      {/* Middle: trends + preview */}
+      {/* Workflow steps */}
+      <WorkflowCards />
+
+      {/* Main content + sidebar */}
       <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-12 lg:col-span-7">
-          <TrendTable rankingItems={rankingItems} isLoading={isLoading && rankingItems.length === 0} />
+        {/* Main: trends + preview */}
+        <div className="col-span-12 lg:col-span-8 xl:col-span-9 grid grid-cols-12 gap-3">
+          <div className="col-span-12 xl:col-span-6">
+            <TrendTable
+              rankingItems={rankingItems}
+              isLoading={isLoading && rankingItems.length === 0}
+            />
+          </div>
+          <div className="col-span-12 xl:col-span-6">
+            <Card className="h-full">
+              <CardContent className="flex h-full flex-col p-3">
+                <div className="mb-2 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold">内容预览</h3>
+                    <p className="text-[10px] text-muted-foreground">
+                      {activePost ? activePost.source_title : "暂无生成内容"}
+                    </p>
+                  </div>
+                </div>
+                {!activePost ? (
+                  <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
+                    <Wand2 size={20} className="mb-1 text-muted-foreground/60" />
+                    选择文章并点击“生成”
+                  </div>
+                ) : (
+                  <div className="flex flex-1 flex-col gap-2 min-h-0">
+                    <Tabs
+                      value={previewPlatform}
+                      onValueChange={(v) => setPreviewPlatform(v as PlatformId)}
+                    >
+                      <TabsList className="grid h-7 w-full grid-cols-3">
+                        {platformOrder.map((platform) => (
+                          <TabsTrigger
+                            key={platform}
+                            value={platform}
+                            className="text-[10px]"
+                          >
+                            <span className="mr-1">{platformIcons[platform]}</span>
+                            {platformLabels[platform]}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      {platformOrder.map((platform) => {
+                        const variant = activePost.variants.find(
+                          (v) => v.platform === platform
+                        );
+                        return (
+                          <TabsContent
+                            key={platform}
+                            value={platform}
+                            className="mt-2 flex-1"
+                          >
+                            {variant ? (
+                              <VariantCard variant={variant} usedLlm={usedLlm} />
+                            ) : (
+                              <div className="text-xs text-muted-foreground">
+                                暂无该平台版本
+                              </div>
+                            )}
+                          </TabsContent>
+                        );
+                      })}
+                    </Tabs>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        <div className="col-span-12 lg:col-span-5">
-          <Card className="h-full">
-            <CardContent className="flex h-full flex-col p-3">
-              <div className="mb-2 flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-semibold">内容预览</h3>
-                  <p className="text-[10px] text-muted-foreground">
-                    {activePost ? activePost.source_title : "暂无生成内容"}
-                  </p>
-                </div>
-              </div>
-              {!activePost ? (
-                <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
-                  <Wand2 size={20} className="mb-1 text-muted-foreground/60" />
-                  选择文章并点击“生成”
-                </div>
-              ) : (
-                <div className="flex flex-1 flex-col gap-2 min-h-0">
-                  <Tabs value={previewPlatform} onValueChange={(v) => setPreviewPlatform(v as PlatformId)}>
-                    <TabsList className="grid h-7 w-full grid-cols-3">
-                      {platformOrder.map((platform) => (
-                        <TabsTrigger key={platform} value={platform} className="text-[10px]">
-                          <span className="mr-1">{platformIcons[platform]}</span>
-                          {platformLabels[platform]}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                    {platformOrder.map((platform) => {
-                      const variant = activePost.variants.find((v) => v.platform === platform);
-                      return (
-                        <TabsContent key={platform} value={platform} className="mt-2 flex-1">
-                          {variant ? (
-                            <VariantCard variant={variant} usedLlm={usedLlm} />
-                          ) : (
-                            <div className="text-xs text-muted-foreground">暂无该平台版本</div>
-                          )}
-                        </TabsContent>
-                      );
-                    })}
-                  </Tabs>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+
+        {/* Sidebar: status + sources */}
+        <div className="col-span-12 lg:col-span-4 xl:col-span-3 flex flex-col gap-3">
+          <SystemStatus />
+          <SourceFilter rssSources={rssSources} />
         </div>
       </div>
 
