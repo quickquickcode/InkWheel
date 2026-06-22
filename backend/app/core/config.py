@@ -40,7 +40,11 @@ class Settings:
 
     @property
     def opencode_available(self) -> bool:
-        return bool(self.opencode_api_key)
+        import shutil
+
+        has_cli = shutil.which("opencode") is not None
+        has_api_key = bool(self.opencode_api_key)
+        return has_cli or has_api_key
 
     @property
     def rss_available(self) -> bool:
