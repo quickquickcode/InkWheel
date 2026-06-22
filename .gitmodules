@@ -1,0 +1,9 @@
+[submodule "external/toutiao"]
+	path = external/toutiao
+	url = https://github.com/quickquickcode/toutiao.git
+[submodule "external/wemp-operator"]
+	path = external/wemp-operator
+	url = https://github.com/IanShaw027/wemp-operator.git
+[submodule "external/XiaohongshuSkills"]
+	path = external/XiaohongshuSkills
+	url = https://github.com/white0dew/XiaohongshuSkills.git

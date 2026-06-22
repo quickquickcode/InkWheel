@@ -1,0 +1,120 @@
+/* ═══ POP ART overlays — refined ═══ */
+
+/* ─── empty state ─── */
+.emptyInk {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  padding: 20px;
+  text-align: center;
+  flex: 1;
+}
+
+.emptyInk span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--pop-white);
+  background: var(--pop-black);
+  font-family: "Bungee", sans-serif;
+  font-size: 16px;
+}
+
+.emptyInk strong {
+  color: var(--pop-black);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.emptyInk p {
+  max-width: 260px;
+  margin: 0;
+  font-size: 12px;
+  color: var(--pop-gray-mid);
+  line-height: 1.5;
+}
+
+/* ─── loading overlay ─── */
+.inkLoading {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  color: var(--pop-blue);
+}
+
+.inkLoading span {
+  color: var(--pop-black);
+  font-family: "Bungee", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* ─── toast ─── */
+.inkToast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(400px, calc(100vw - 32px));
+  padding: 10px 10px 10px 16px;
+  color: var(--pop-black);
+  border: var(--border);
+  background: var(--pop-white);
+  box-shadow: var(--shadow-pop);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.inkToast span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.inkToast button {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--pop-gray-mid);
+  background: var(--pop-gray);
+  border: var(--border-subtle);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 13px;
+  transition: all 120ms ease;
+}
+
+.inkToast button:hover {
+  color: var(--pop-black);
+  background: var(--pop-gray-light);
+}
+
+/* ─── spin animation ─── */
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

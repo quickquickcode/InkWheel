@@ -1,0 +1,452 @@
+/* ═══ POP ART layout — refined, cleaner ═══ */
+
+.inkApp {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: var(--rail-width) 1fr;
+  background: var(--pop-gray);
+}
+
+/* ─── sidebar — clean with yellow accent ─── */
+.inkRail {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border-right: var(--border);
+  background: var(--pop-white);
+  z-index: 12;
+}
+
+.railClose,
+.mobileMenu,
+.railScrim {
+  display: none;
+}
+
+.brandSeal {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--pop-white);
+  background: var(--pop-red);
+  border: var(--border);
+  font-family: "Bungee", sans-serif;
+  font-size: 20px;
+  box-shadow: var(--shadow-pop-sm);
+}
+
+.brandCopy {
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.brandCopy span {
+  color: var(--pop-gray-mid);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.brandCopy strong {
+  color: var(--pop-black);
+  font-size: 13px;
+  font-weight: 800;
+  font-family: "Bungee", sans-serif;
+}
+
+.stageNav {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+}
+
+.stageButton {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 5px 2px;
+  color: var(--pop-black);
+  background: var(--pop-gray);
+  border: var(--border-thin);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.stageButton:hover {
+  background: var(--pop-yellow);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-pop-sm);
+}
+
+.stageButton.active {
+  color: var(--pop-white);
+  background: var(--pop-blue);
+  border-color: var(--pop-black);
+  box-shadow: var(--shadow-pop-sm);
+}
+
+.stageSeal {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  color: var(--pop-black);
+  background: var(--pop-yellow);
+  border: var(--border-thin);
+  font-family: "Bungee", sans-serif;
+  font-size: 11px;
+}
+
+.stageButton.active .stageSeal {
+  background: var(--pop-yellow);
+  color: var(--pop-black);
+}
+
+.stageButton span:last-child {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sidebarMotto {
+  margin-top: auto;
+  color: var(--pop-gray-mid);
+  font-size: 9px;
+  text-align: center;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* ─── workspace — viewport-fitted grid ─── */
+.inkWorkspace {
+  min-width: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: var(--gap);
+  padding: 10px 14px 10px;
+  overflow: hidden;
+}
+
+/* ─── hero — bold accent bar ─── */
+.heroScroll {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border: var(--border);
+  background: var(--pop-red);
+  box-shadow: var(--shadow-pop);
+}
+
+.overline {
+  display: none;
+}
+
+.heroScroll h1 {
+  margin: 0;
+  color: var(--pop-yellow);
+  font-family: "Bangers", cursive;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-shadow:
+    -1.5px -1.5px 0 var(--pop-black),
+     1.5px -1.5px 0 var(--pop-black),
+    -1.5px  1.5px 0 var(--pop-black),
+     1.5px  1.5px 0 var(--pop-black),
+     0 2px 0 var(--pop-black);
+}
+
+.heroScroll p {
+  display: none;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ─── topic band — clean strip ─── */
+.topicBand {
+  padding: 6px 10px;
+  border: var(--border);
+  background: var(--pop-white);
+}
+
+.sectionTitle,
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sectionTitle span,
+.panelHead h2 {
+  margin: 0;
+  color: var(--pop-black);
+  font-family: "Bungee", sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.sectionTitle small,
+.panelHead span {
+  color: var(--pop-gray-mid);
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--pop-gray);
+  padding: 2px 8px;
+  border: var(--border-subtle);
+}
+
+.panelHead div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topicRiver {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.topicSlip {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  text-align: left;
+  color: var(--pop-black);
+  border: var(--border-thin);
+  background: var(--pop-gray);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 120ms ease;
+}
+
+.topicSlip:hover {
+  background: var(--pop-yellow);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-pop-sm);
+}
+
+.topicSlip.active {
+  background: var(--pop-blue);
+  color: var(--pop-white);
+  border-color: var(--pop-black);
+  box-shadow: var(--shadow-pop-sm);
+}
+
+.topicMark {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--pop-white);
+  background: var(--pop-black);
+  border: var(--border-thin);
+  font-family: "Bungee", sans-serif;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.topicSlip.active .topicMark {
+  background: var(--pop-yellow);
+  color: var(--pop-black);
+}
+
+.topicSlip strong {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.topicSlip small {
+  display: none;
+}
+
+/* ─── panel base ─── */
+.paperPanel {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.paperPanel > * {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* ─── main stage — 2-panel layout ─── */
+.mainStage {
+  display: grid;
+  grid-template-columns: var(--list-width, minmax(260px, 0.32fr)) 1fr;
+  gap: var(--gap);
+  min-height: 0;
+  overflow: hidden;
+  transition: grid-template-columns 200ms ease;
+}
+
+.mainStage.listCollapsed {
+  --list-width: 44px;
+}
+
+/* ─── article list — left panel ─── */
+.articleQueue {
+  display: flex;
+  flex-direction: column;
+  background: var(--pop-white);
+  border: var(--border);
+  padding: 8px 10px;
+  min-height: 0;
+  overflow: hidden;
+  transition: all 200ms ease;
+}
+
+.articleQueue.collapsed {
+  width: 44px;
+  padding: 8px 4px;
+  align-items: center;
+}
+
+.articleQueue.collapsed .panelHead,
+.articleQueue.collapsed .inkSearch,
+.articleQueue.collapsed .articleScroll,
+.articleQueue.collapsed .progressInk,
+.articleQueue.collapsed .logStrip {
+  display: none;
+}
+
+.listToggle {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--pop-gray-mid);
+  background: var(--pop-gray);
+  border: var(--border-thin);
+  cursor: pointer;
+  transition: all 120ms ease;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.listToggle:hover {
+  background: var(--pop-yellow);
+  color: var(--pop-black);
+}
+
+.collapsedLabel {
+  writing-mode: vertical-rl;
+  color: var(--pop-gray-mid);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 8px;
+}
+
+/* ─── content panel — right, tabbed ─── */
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.contentTabs {
+  display: flex;
+  gap: 0;
+  border-bottom: var(--border);
+  background: var(--pop-white);
+  flex-shrink: 0;
+}
+
+.contentTab {
+  flex: 1;
+  padding: 9px 14px;
+  color: var(--pop-gray-mid);
+  background: var(--pop-white);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  transition: all 120ms ease;
+}
+
+.contentTab:hover {
+  color: var(--pop-black);
+  background: var(--pop-gray);
+}
+
+.contentTab.active {
+  color: var(--pop-black);
+  border-bottom-color: var(--pop-blue);
+}
+
+.contentBody {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--pop-white);
+  border: var(--border);
+  border-top: 0;
+}
+
+.contentBody > section {
+  height: 100%;
+  border: 0;
+  box-shadow: none;
+}
+
+/* ─── compact log strip (bottom of article list) ─── */
+.logStrip {
+  flex-shrink: 0;
+  border-top: var(--border-subtle);
+  padding-top: 6px;
+  margin-top: 6px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.logStripItem {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 0;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.logStripItem time {
+  color: var(--pop-gray-mid);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.logStripItem strong {
+  color: var(--pop-black);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

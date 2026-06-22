@@ -1,0 +1,229 @@
+/* ═══ POP ART responsive — refined ═══ */
+
+@media (max-width: 1340px) {
+  .mainStage {
+    --list-width: minmax(240px, 0.3fr);
+  }
+}
+
+@media (max-width: 960px) {
+  html, body {
+    height: auto;
+    overflow: auto;
+  }
+
+  .inkApp {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .inkWorkspace {
+    height: auto;
+    grid-template-rows: auto;
+    gap: 12px;
+    padding: 60px 14px 20px;
+    overflow: auto;
+  }
+
+  /* ─── mobile menu button ─── */
+  .mobileMenu {
+    position: fixed;
+    left: 14px;
+    top: 14px;
+    z-index: 30;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    color: var(--pop-white);
+    border: var(--border);
+    background: var(--pop-red);
+    box-shadow: var(--shadow-pop-sm);
+  }
+
+  /* ─── sidebar drawer ─── */
+  .inkRail {
+    position: fixed;
+    left: 0;
+    transform: translateX(-110%);
+    width: 82px;
+    height: 100vh;
+    transition: transform 180ms ease;
+  }
+
+  .inkRail.open {
+    transform: translateX(0);
+  }
+
+  .railClose {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    color: var(--pop-black);
+    background: var(--pop-gray);
+    border: var(--border-thin);
+  }
+
+  .railScrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 11;
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  /* ─── hero ─── */
+  .heroScroll {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .heroActions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .overline {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--pop-yellow);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .heroScroll p {
+    display: block;
+    max-width: 720px;
+    margin: 4px 0 0;
+    color: var(--pop-white);
+    opacity: 0.8;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ─── main stage — collapse to single column ─── */
+  .mainStage {
+    grid-template-columns: 1fr;
+  }
+
+  .mainStage.listCollapsed {
+    --list-width: 1fr;
+  }
+
+  .articleQueue.collapsed {
+    width: auto;
+    flex-direction: row;
+    padding: 8px 10px;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .articleQueue.collapsed .collapsedLabel {
+    writing-mode: horizontal-tb;
+    margin-top: 0;
+  }
+
+  .articleScroll {
+    max-height: 500px;
+    min-height: 200px;
+  }
+
+  .topicSlip small {
+    display: block;
+  }
+
+  .topicSlip {
+    white-space: normal;
+  }
+
+  .paperPanel {
+    overflow: auto;
+  }
+
+  .publishPicker,
+  .accountGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .publishPicker select,
+  .accountGrid input {
+    width: 100%;
+  }
+
+  .generatedScroll {
+    grid-template-columns: 1fr;
+  }
+
+  .scrollCover {
+    min-height: 40px;
+    grid-template-columns: auto auto;
+    border-right: 0;
+    border-bottom: var(--border-thin);
+    grid-template-rows: auto;
+    flex-direction: row;
+  }
+
+  .scrollCover span {
+    writing-mode: horizontal-tb;
+  }
+
+  .previewActions,
+  .fusionActions,
+  .publishActions {
+    display: grid;
+  }
+
+  .inkButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroScroll h1 {
+    font-size: 24px;
+  }
+
+  .sectionTitle span,
+  .panelHead h2 {
+    font-size: 14px;
+  }
+
+  .topicRiver {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .topicSlip {
+    flex: 0 0 auto;
+  }
+
+  .feedCard {
+    border-left-width: 2px;
+  }
+
+  .feedCardBody {
+    padding: 4px 8px 6px;
+  }
+
+  .feedCardTitle {
+    font-size: 12px;
+  }
+
+  .articleHero dl,
+  .platformInkTabs,
+  .adapterGarden {
+    grid-template-columns: 1fr;
+  }
+
+  .accountGrid {
+    grid-template-columns: 1fr;
+  }
+}

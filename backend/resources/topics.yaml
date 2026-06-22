@@ -1,0 +1,220 @@
+topics:
+  - id: ai-llm
+    name: AI 与大模型
+    description: 大模型、Agent、AI 工具、算法前沿
+    icon: sparkles
+    keywords:
+      - AI
+      - 人工智能
+      - 大模型
+      - LLM
+      - Agent
+      - 智能体
+      - 机器学习
+      - 多模态
+      - AIGC
+      - OpenAI
+      - Kimi
+      - DeepSeek
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: ai-edu
+    name: AI 教育
+    description: 教育科技、个性化学习、智能教育
+    icon: graduation-cap
+    keywords:
+      - AI教育
+      - 智能教育
+      - 个性化学习
+      - 在线教育
+      - 教育科技
+      - 学习工具
+      - 教学
+      - 课程
+      - 学堂
+      - 知识
+    source_ids:
+      - 797b9f60bf7d
+      - 815569de4c6e
+      - 7e1bfd9b8f1a
+      - 7abfafff500d
+      - 723b8c9458f0
+      - cd933858389d
+      - 8b669665474e
+      - 6e69ccaf215c
+      - 590917d9ea48
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: tech-dev
+    name: 技术趋势
+    description: 前端、后端、架构、开源、云计算
+    icon: code
+    keywords:
+      - 技术
+      - 开发
+      - 架构
+      - 前端
+      - 后端
+      - 开源
+      - 云原生
+      - 数据库
+      - 中间件
+      - GitHub
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: product-design
+    name: 产品与设计
+    description: 产品设计、UX、运营、增长
+    icon: palette
+    keywords:
+      - 产品
+      - 设计
+      - UX
+      - UI
+      - 运营
+      - 增长
+      - 用户体验
+      - 交互
+      - 产品经理
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: startup-invest
+    name: 创业与投资
+    description: 创业、投资、VC、商业观察
+    icon: rocket
+    keywords:
+      - 创业
+      - 投资
+      - 融资
+      - VC
+      - 创投
+      - 商业
+      - 市场
+      - 创始人
+      - 公司
+      - 行业
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: business-finance
+    name: 商业财经
+    description: 财经、金融、宏观经济、股市
+    icon: trend-up
+    keywords:
+      - 财经
+      - 金融
+      - 经济
+      - 股市
+      - 基金
+      - 证券
+      - 银行
+      - 宏观
+      - 财富
+      - 理财
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: life-culture
+    name: 生活与文化
+    description: 生活方式、文化、读书、心理
+    icon: coffee
+    keywords:
+      - 生活
+      - 文化
+      - 读书
+      - 心理
+      - 情感
+      - 成长
+      - 人生
+      - 社会
+      - 人文
+      - 艺术
+    days: 7
+    limit: 50
+    max_sources: 20
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: news-tech-society
+    name: 科技与社会
+    description: 科技新闻、社会观察、科普
+    icon: globe
+    keywords:
+      - 新闻
+      - 科技
+      - 社会
+      - 科普
+      - 媒体
+      - 报道
+      - 评论
+      - 观察
+      - 研究
+      - 时事
+    days: 7
+    limit: 50
+    max_sources: 25
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: health-science
+    name: 健康与科学
+    description: 健康、医疗、科学科普
+    icon: heart-pulse
+    keywords:
+      - 健康
+      - 医疗
+      - 医学
+      - 医生
+      - 养生
+      - 科普
+      - 科学
+      - 生物
+      - 心理
+    days: 7
+    limit: 30
+    max_sources: 15
+    rss_timeout_seconds: 8
+    rss_max_workers: 3
+
+  - id: sports-entertainment
+    name: 体育娱乐
+    description: 体育、游戏、电影、娱乐
+    icon: gamepad-2
+    keywords:
+      - 体育
+      - 运动
+      - 足球
+      - 篮球
+      - NBA
+      - 电影
+      - 娱乐
+      - 明星
+      - 游戏
+      - 电竞
+    days: 7
+    limit: 30
+    max_sources: 15
+    rss_timeout_seconds: 8
+    rss_max_workers: 3

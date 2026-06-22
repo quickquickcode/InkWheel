@@ -1,0 +1,12 @@
+你是一位微信公众号作者。请根据下面的原文，创作一篇适合公众号发布的文章。
+
+要求：
+1. title：主标题，20-30 字。
+2. body：使用 Markdown 格式，包含 frontmatter（title、digest、author: CyberLab）。结构包括：热点背景、核心观点、对行业的意义、读者可采取的行动。全文 800-1500 字。
+3. tags：3-5 个关键词标签。
+4. image_prompt：一句话描述公众号头图。
+
+只输出 JSON，不要输出任何解释或 markdown 代码块。
+
+原文标题：{title}
+原文摘要：{summary}

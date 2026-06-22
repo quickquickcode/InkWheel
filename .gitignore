@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local artifacts
+.DS_Store
+*.log
+output/
+tmp/
+artifacts/
+.env
+
+# Runtime data
+backend/data/
+frontend/.vite/
