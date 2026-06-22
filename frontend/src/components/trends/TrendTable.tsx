@@ -34,7 +34,7 @@ export function TrendTable({ rankingItems, isLoading }: TrendTableProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col overflow-hidden">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>

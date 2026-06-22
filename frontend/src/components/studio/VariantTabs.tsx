@@ -79,7 +79,7 @@ export function VariantTabs({ post, usedLlm }: VariantTabsProps) {
         {platformOrder.map((platform) => {
           const variant = post.variants.find((v) => v.platform === platform);
           return (
-            <TabsContent key={platform} value={platform} className="flex-1 overflow-hidden">
+            <TabsContent key={platform} value={platform} className="h-full flex flex-col overflow-hidden">
               {variant ? (
                 <VariantCard variant={variant} usedLlm={usedLlm} />
               ) : (

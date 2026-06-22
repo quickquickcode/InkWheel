@@ -123,14 +123,14 @@ export function DashboardView() {
       <div className="grid grid-cols-12 gap-3">
         {/* Main: trends + preview */}
         <div className="col-span-12 lg:col-span-8 xl:col-span-9 grid grid-cols-12 gap-3">
-          <div className="col-span-12 xl:col-span-7 h-[min(520px,65vh)]">
+          <div className="col-span-12 xl:col-span-7 h-[520px] max-h-[65vh]">
             <TrendTable
               rankingItems={rankingItems}
               isLoading={isLoading && rankingItems.length === 0}
             />
           </div>
-          <div className="col-span-12 xl:col-span-5 h-[min(520px,65vh)]">
-            <Card className="h-full">
+          <div className="col-span-12 xl:col-span-5 h-[520px] max-h-[65vh]">
+            <Card className="h-full overflow-hidden">
               <CardContent className="flex h-full flex-col p-3">
                 <div className="mb-2 flex items-center justify-between">
                   <div>
@@ -171,7 +171,7 @@ export function DashboardView() {
                           <TabsContent
                             key={platform}
                             value={platform}
-                            className="mt-2 flex-1 overflow-hidden"
+                            className="mt-2 h-full flex flex-col overflow-hidden"
                           >
                             {variant ? (
                               <VariantCard variant={variant} usedLlm={usedLlm} />
