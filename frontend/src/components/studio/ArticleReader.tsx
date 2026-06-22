@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAnalysis } from "@/hooks/use-analysis";
-import { articleExcerpt, formatDate, platformLabels } from "@/lib/utils";
+import { articleExcerpt, formatDate, platformLabels, stripHtml } from "@/lib/utils";
 import { Sparkles, FileText, Lightbulb, Users, Tag, ListOrdered, Fingerprint, ImageIcon, Target } from "lucide-react";
 
 interface ArticleReaderProps {
@@ -45,7 +45,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <CardTitle className="text-base leading-snug">{article.title}</CardTitle>
+              <CardTitle className="text-base leading-snug">{stripHtml(article.title)}</CardTitle>
               <CardDescription className="mt-1.5 flex flex-wrap items-center gap-2">
                 <Badge variant="outline" className="text-xs font-normal">
                   {article.source}
@@ -79,7 +79,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
           ) : (
             <div className="space-y-4">
               <p className="break-words whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
-                {article.content_text || article.content || article.summary || "暂无正文或摘要"}
+                {stripHtml(article.content_text || article.content || article.summary) || "暂无正文或摘要"}
               </p>
               {article.images && article.images.length > 0 && (
                 <div className="space-y-2">

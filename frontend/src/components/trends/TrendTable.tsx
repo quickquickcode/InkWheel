@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { relativeTime } from "@/lib/utils";
+import { relativeTime, stripHtml } from "@/lib/utils";
 import { Newspaper, TrendingUp } from "lucide-react";
 
 interface TrendTableProps {
@@ -107,7 +107,7 @@ export function TrendTable({ rankingItems, isLoading }: TrendTableProps) {
                     <TableCell className="font-medium">{rank}</TableCell>
                     <TableCell>
                       <div className="min-w-[200px] max-w-[420px] whitespace-normal text-sm font-medium leading-snug">
-                        {article.title}
+                        {stripHtml(article.title)}
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">

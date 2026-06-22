@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { articleExcerpt } from "@/lib/utils";
 import { FileText, Layers, CheckSquare } from "lucide-react";
+import { stripHtml } from "@/lib/utils";
 
 interface ArticleSelectorProps {
   articles: ArticleItem[];
@@ -39,14 +40,14 @@ export function ArticleSelector({
           </div>
         )}
       </CardHeader>
-      <CardContent className="flex-1 pt-0">
+      <CardContent className="flex flex-1 flex-col pt-0">
         {articles.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center py-8 text-center text-sm text-muted-foreground">
             <FileText size={24} className="mb-2 text-muted-foreground/60" />
             暂无文章，请先在趋势洞察页面采集
           </div>
         ) : (
-          <ScrollArea className="h-full">
+          <div className="flex-1 overflow-auto pr-1">
             <div className="space-y-2 pr-3">
               {articles.map((article) => {
                 const isSelected = selectedArticleIds.includes(article.id);
@@ -69,7 +70,7 @@ export function ArticleSelector({
                               isActive ? "text-primary" : "text-foreground"
                             }`}
                           >
-                            {article.title}
+                            {stripHtml(article.title)}
                           </h4>
                         </div>
                         <div className="mt-1.5 flex flex-wrap items-center gap-2">
@@ -88,7 +89,7 @@ export function ArticleSelector({
                           )}
                         </div>
                         <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">
-                          {articleExcerpt(article.summary || article.content, 80)}
+                          {articleExcerpt(stripHtml(article.summary || article.content), 80)}
                         </p>
                       </div>
                       <div
@@ -108,7 +109,7 @@ export function ArticleSelector({
                 );
               })}
             </div>
-          </ScrollArea>
+          </div>
         )}
       </CardContent>
     </Card>

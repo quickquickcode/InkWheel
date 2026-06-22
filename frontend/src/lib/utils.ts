@@ -49,6 +49,13 @@ export function articleExcerpt(text: string | undefined | null, maxLength = 120)
   return normalized.slice(0, maxLength).replace(/\s+\S*$/, "") + "…";
 }
 
+export function stripHtml(html: string | undefined | null): string {
+  if (!html) return "";
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return (tmp.textContent || tmp.innerText || "").replace(/\s+/g, " ").trim();
+}
+
 export const platformLabels: Record<PlatformId, string> = {
   xiaohongshu: "小红书",
   toutiao: "今日头条",

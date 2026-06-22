@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { platformOrder } from "@/lib/constants";
-import { platformLabels, platformIcons } from "@/lib/utils";
+import { platformLabels, platformIcons, stripHtml } from "@/lib/utils";
 import { Loader2, Download, Sparkles, Wand2 } from "lucide-react";
 import type { PlatformId } from "@/types";
 
@@ -136,7 +136,7 @@ export function DashboardView() {
                   <div>
                     <h3 className="text-sm font-semibold">内容预览</h3>
                     <p className="text-[10px] text-muted-foreground">
-                      {activePost ? activePost.source_title : "暂无生成内容"}
+                      {activePost ? stripHtml(activePost.source_title) : "暂无生成内容"}
                     </p>
                   </div>
                 </div>

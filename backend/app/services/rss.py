@@ -78,7 +78,9 @@ def _parse_opml(path: Path) -> list[RssSource]:
 
 
 def _entry_to_article(entry: dict, source: RssSource) -> Optional[ArticleItem]:
-    title = (entry.get("title") or "").strip()
+    title_raw = (entry.get("title") or "").strip()
+    # 有些 RSS 源的 title 也带 HTML 标签，需要清洗
+    title = _clean_html(title_raw)["text"] or title_raw
     link = entry.get("link") or ""
     if not title:
         return None
