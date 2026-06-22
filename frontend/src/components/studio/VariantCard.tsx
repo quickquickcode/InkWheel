@@ -18,7 +18,6 @@ interface VariantCardProps {
 }
 
 function countChineseChars(text: string): number {
-  // 统计中文字符 + 英文单词近似字数
   const cn = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
   const en = (text.match(/[a-zA-Z0-9]+/g) || []).length;
   return cn + en;
@@ -42,14 +41,14 @@ export function VariantCard({ variant, usedLlm }: VariantCardProps) {
   const wordCount = countChineseChars(variant.body);
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden">
+    <Card className="grid h-full grid-rows-[auto_1fr] overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="text-lg" aria-hidden>
               {platformIcons[variant.platform]}
             </span>
-            <div>
+            <div className="min-w-0">
               <CardTitle className="text-base">
                 {platformLabels[variant.platform]}
               </CardTitle>
@@ -58,7 +57,7 @@ export function VariantCard({ variant, usedLlm }: VariantCardProps) {
               </CardDescription>
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <Badge variant={usedLlm ? "default" : "secondary"} className="gap-1 text-[10px]">
               {usedLlm ? (
                 <>
@@ -76,20 +75,20 @@ export function VariantCard({ variant, usedLlm }: VariantCardProps) {
               variant="ghost"
               size="icon"
               onClick={handleCopy}
-              className="shrink-0"
+              className="h-7 w-7 shrink-0"
               aria-label="复制文案"
             >
               {copied ? (
-                <Check size={16} className="text-green-500" />
+                <Check size={14} className="text-green-500" />
               ) : (
-                <Copy size={16} />
+                <Copy size={14} />
               )}
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-1 flex-col space-y-3 overflow-hidden">
-        <div className="flex-1 overflow-auto rounded-md border bg-muted/30 p-3">
+      <CardContent className="grid min-h-0 grid-rows-[1fr_auto_auto] gap-3 overflow-hidden pt-0">
+        <div className="h-full min-h-0 overflow-auto rounded-md border bg-muted/30 p-3">
           <div className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/90">
             {variant.body}
           </div>
