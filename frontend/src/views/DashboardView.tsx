@@ -193,7 +193,7 @@ export function DashboardView() {
         </div>
 
         {/* Sidebar: status + sources */}
-        <div className="col-span-12 lg:col-span-4 xl:col-span-3 flex flex-col gap-3">
+        <div className="col-span-12 lg:col-span-4 xl:col-span-3 flex h-[520px] max-h-[65vh] flex-col gap-3">
           <SystemStatus />
           <SourceFilter rssSources={rssSources} />
         </div>
