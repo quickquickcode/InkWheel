@@ -37,7 +37,7 @@ class WechatAdapter(PlatformAdapter):
             f"---\n"
             f"title: {variant.title}\n"
             f"digest: {digest}\n"
-            f"author: CyberLab\n"
+            f"author: InkWheel\n"
             f"---\n\n"
             f"{variant.body}\n",
             encoding="utf-8",

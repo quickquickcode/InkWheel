@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAnalysis } from "@/hooks/use-analysis";
 import { articleExcerpt, formatDate, platformLabels } from "@/lib/utils";
-import { Sparkles, FileText, Lightbulb, Users, Tag, ListOrdered, Fingerprint } from "lucide-react";
+import { Sparkles, FileText, Lightbulb, Users, Tag, ListOrdered, Fingerprint, ImageIcon } from "lucide-react";
 
 interface ArticleReaderProps {
   article?: ArticleItem;
@@ -77,9 +77,39 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
               <Skeleton className="h-4 w-[60%]" />
             </div>
           ) : (
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
-              {article.content || article.summary || "暂无正文或摘要"}
-            </p>
+            <div className="space-y-4">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+                {article.content_text || article.content || article.summary || "暂无正文或摘要"}
+              </p>
+              {article.images && article.images.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                    <ImageIcon size={12} />
+                    文章配图
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {article.images.slice(0, 4).map((url, index) => (
+                      <a
+                        key={index}
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="h-16 w-16 overflow-hidden rounded-md border bg-muted"
+                      >
+                        <img
+                          src={url}
+                          alt={`配图 ${index + 1}`}
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = "none";
+                          }}
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </CardContent>
       </Card>

@@ -427,7 +427,7 @@ def generate_content(request: GenerateRequest) -> GenerateResponse:
         message,
         "success",
     )
-    return GenerateResponse(post=post, job=job, usage=usage)
+    return GenerateResponse(post=post, job=job, usage=usage, used_llm=used_llm)
 
 
 @router.post("/content/generate-async", response_model=GenerateAsyncResponse)
@@ -513,7 +513,7 @@ def generate_fused_content(request: GenerateFusedRequest) -> GenerateFusedRespon
         message,
         "success",
     )
-    return GenerateFusedResponse(post=post, job=job, usage=usage)
+    return GenerateFusedResponse(post=post, job=job, usage=usage, used_llm=used_llm)
 
 
 @router.post("/content/generate-fused-async", response_model=GenerateFusedAsyncResponse)

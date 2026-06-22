@@ -2,7 +2,7 @@
 
 要求：
 1. title：主标题，20-30 字。
-2. body：使用 Markdown 格式，包含 frontmatter（title、digest、author: CyberLab）。结构包括：教育背景、核心观点、对教师/家长/学生的意义、读者可采取的行动。全文 800-1500 字。
+2. body：使用 Markdown 格式，包含 frontmatter（title、digest、author）。结构包括：教育背景、核心观点、对教师/家长/学生的意义、读者可采取的行动。全文 800-1500 字。
 3. tags：3-5 个关键词标签。
 4. image_prompt：一句话描述公众号头图。
 

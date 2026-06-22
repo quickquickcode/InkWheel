@@ -22,7 +22,7 @@ def test_status_exposes_adapter_contracts(client):
 
     assert response.status_code == 200
     body = response.json()
-    assert body["name"] == "CyberLab ContentOps API"
+    assert body["name"] == "InkWheel API"
     assert len(body["adapters"]) == 3
     assert {item["platform"] for item in body["adapters"]} == {
         "xiaohongshu",

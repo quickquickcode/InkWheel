@@ -7,10 +7,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Cpu, HardDrive, Users, AlertCircle } from "lucide-react";
+import { Cpu, HardDrive, Users, AlertCircle, Bot } from "lucide-react";
 
 export function SystemStatus() {
-  const { accounts, adapters, repos, jobs } = useAppStore();
+  const { accounts, adapters, repos, jobs, llmAvailable } = useAppStore();
 
   const connectedAdapters = adapters.filter((a) => a.connected).length;
   const connectedAccounts = accounts.filter((a) => a.status === "connected").length;
@@ -57,6 +57,22 @@ export function SystemStatus() {
             </div>
             <Badge variant="outline" className="mt-2 text-[10px]">
               在线
+            </Badge>
+          </div>
+
+          <div className="rounded-lg border p-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Bot size={14} />
+              AI 模型
+            </div>
+            <div className="mt-1 text-2xl font-bold">
+              {llmAvailable ? "可用" : "未配置"}
+            </div>
+            <Badge
+              variant={llmAvailable ? "default" : "secondary"}
+              className="mt-2 text-[10px]"
+            >
+              {llmAvailable ? "LLM" : "模板兜底"}
             </Badge>
           </div>
 

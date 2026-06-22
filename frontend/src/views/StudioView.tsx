@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { platformOrder } from "@/lib/constants";
 import { Loader2, Wand2, GitMerge } from "lucide-react";
+import { LlmToggle } from "@/components/system/LlmToggle";
 
 export function StudioView() {
   const store = useAppStore();
@@ -23,6 +24,7 @@ export function StudioView() {
 
   const selectedArticle = getSelectedArticle();
   const activePost = getActivePost();
+  const usedLlm = activePost ? store.usedLlmByPost[activePost.id] ?? activePost.used_llm : false;
   const analysis = selectedArticle ? analysisByArticleId[selectedArticle.id] : undefined;
 
   const { analyze, analyzing } = useAnalysis();
@@ -70,9 +72,7 @@ export function StudioView() {
             <CardContent className="space-y-3 p-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">生成操作</span>
-                <span className="text-xs text-muted-foreground">
-                  已选 {selectedArticleIds.length} 篇
-                </span>
+                <LlmToggle />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <Button
@@ -126,7 +126,7 @@ export function StudioView() {
           </Card>
 
           <div className="flex-1 min-h-0">
-            <VariantTabs post={activePost} />
+            <VariantTabs post={activePost} usedLlm={usedLlm} />
           </div>
         </div>
       </div>

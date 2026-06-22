@@ -10,13 +10,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { platformLabels, platformIcons, articleExcerpt } from "@/lib/utils";
-import { Check, Copy, Image, Clock } from "lucide-react";
+import { Check, Copy, Image, Clock, Bot, FileText } from "lucide-react";
 
 interface VariantCardProps {
   variant: ContentVariant;
+  usedLlm?: boolean;
 }
 
-export function VariantCard({ variant }: VariantCardProps) {
+export function VariantCard({ variant, usedLlm }: VariantCardProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -46,19 +47,34 @@ export function VariantCard({ variant }: VariantCardProps) {
               </CardDescription>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleCopy}
-            className="shrink-0"
-            aria-label="复制文案"
-          >
-            {copied ? (
-              <Check size={16} className="text-green-500" />
-            ) : (
-              <Copy size={16} />
-            )}
-          </Button>
+          <div className="flex items-center gap-1">
+            <Badge variant={usedLlm ? "default" : "secondary"} className="gap-1 text-[10px]">
+              {usedLlm ? (
+                <>
+                  <Bot size={10} />
+                  LLM
+                </>
+              ) : (
+                <>
+                  <FileText size={10} />
+                  模板
+                </>
+              )}
+            </Badge>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleCopy}
+              className="shrink-0"
+              aria-label="复制文案"
+            >
+              {copied ? (
+                <Check size={16} className="text-green-500" />
+              ) : (
+                <Copy size={16} />
+              )}
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">

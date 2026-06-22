@@ -46,6 +46,8 @@ interface AppState {
   currentView: ViewId;
   isLoading: boolean;
   useLlm: boolean;
+  llmAvailable: boolean;
+  usedLlmByPost: Record<string, boolean>;
   toasts: Toast[];
 }
 
@@ -78,6 +80,8 @@ interface AppActions {
   setIsLoading: (loading: boolean) => void;
   setUseLlm: (use: boolean) => void;
   toggleUseLlm: () => void;
+  setLlmAvailable: (available: boolean) => void;
+  setPostUsedLlm: (postId: string, used: boolean) => void;
 
   addToast: (toast: Omit<Toast, "id">) => void;
   removeToast: (id: string) => void;
@@ -115,6 +119,8 @@ const initialState: AppState = {
   currentView: "dashboard",
   isLoading: true,
   useLlm: false,
+  llmAvailable: false,
+  usedLlmByPost: {},
   toasts: [],
 };
 
@@ -167,6 +173,11 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
   setIsLoading: (loading) => set({ isLoading: loading }),
   setUseLlm: (use) => set({ useLlm: use }),
   toggleUseLlm: () => set((state) => ({ useLlm: !state.useLlm })),
+  setLlmAvailable: (available) => set({ llmAvailable: available }),
+  setPostUsedLlm: (postId, used) =>
+    set((state) => ({
+      usedLlmByPost: { ...state.usedLlmByPost, [postId]: used },
+    })),
 
   addToast: (toast) =>
     set((state) => ({

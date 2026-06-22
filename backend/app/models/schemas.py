@@ -42,6 +42,9 @@ class ArticleItem(BaseModel):
     url: Optional[str] = None
     summary: Optional[str] = None
     content: Optional[str] = None
+    content_text: Optional[str] = None
+    content_html: Optional[str] = None
+    images: list[str] = []
     published_at: Optional[str] = None
     collected_at: str
     topic_id: Optional[str] = None
@@ -224,6 +227,7 @@ class GenerateResponse(BaseModel):
     post: PostDraft
     job: JobEvent
     usage: Optional[LLMUsage] = None
+    used_llm: bool = False
 
 
 class PreviewRequest(BaseModel):
@@ -312,7 +316,7 @@ class DashboardState(BaseModel):
 
 
 class ApiStatus(BaseModel):
-    name: str = "CyberLab ContentOps API"
+    name: str = "InkWheel API"
     environment: str = "dev"
     rss_available: bool
     opencode_available: bool = False
@@ -389,6 +393,7 @@ class GenerateFusedResponse(BaseModel):
     post: PostDraft
     job: JobEvent
     usage: Optional[LLMUsage] = None
+    used_llm: bool = False
 
 
 class GenerateFusedAsyncResponse(BaseModel):

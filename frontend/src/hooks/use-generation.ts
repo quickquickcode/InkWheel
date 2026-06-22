@@ -48,11 +48,15 @@ export function useGeneration() {
         await pollJob(job_id, setProgress);
         const dashboard = await getDashboard();
         store.setDashboard(dashboard);
+        const newPost = dashboard.posts[0];
+        if (newPost) {
+          store.setActivePostId(newPost.id);
+          store.setPostUsedLlm(newPost.id, store.useLlm && store.llmAvailable);
+        }
         store.setActivePlatform("xiaohongshu");
-        store.setActivePostId(dashboard.posts[0]?.id);
         store.addToast({
           title: "生成完成",
-          message: `已生成 ${dashboard.posts[0]?.variants.length ?? 0} 个平台版本`,
+          message: `已生成 ${newPost?.variants.length ?? 0} 个平台版本`,
           status: "success",
         });
       } catch (error) {
@@ -84,8 +88,12 @@ export function useGeneration() {
         await pollJob(job_id, setFuseProgress);
         const dashboard = await getDashboard();
         store.setDashboard(dashboard);
+        const newPost = dashboard.posts[0];
+        if (newPost) {
+          store.setActivePostId(newPost.id);
+          store.setPostUsedLlm(newPost.id, store.useLlm && store.llmAvailable);
+        }
         store.setActivePlatform("xiaohongshu");
-        store.setActivePostId(dashboard.posts[0]?.id);
         store.clearArticleSelection();
         store.addToast({
           title: "融合生成完成",

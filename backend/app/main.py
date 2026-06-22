@@ -6,7 +6,7 @@ from app.api.routes import router
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="CyberLab ContentOps API",
+        title="InkWheel API",
         version="0.1.0",
         description="Trend-driven multi-platform content operations lab API.",
     )

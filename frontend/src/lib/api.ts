@@ -118,7 +118,7 @@ export function generateContent({
   useLlm?: boolean;
   topicId?: string;
 }) {
-  return api<{ post: PostDraft; job: JobEvent; usage?: unknown }>("/api/content/generate", {
+  return api<{ post: PostDraft; job: JobEvent; usage?: unknown; used_llm: boolean }>("/api/content/generate", {
     method: "POST",
     body: JSON.stringify({
       article_id: articleId,
@@ -164,7 +164,7 @@ export function generateContentFused({
   topicId?: string;
   userPrompt?: string;
 }) {
-  return api<{ post: PostDraft; job: JobEvent; usage?: unknown }>("/api/content/generate-fused", {
+  return api<{ post: PostDraft; job: JobEvent; usage?: unknown; used_llm: boolean }>("/api/content/generate-fused", {
     method: "POST",
     body: JSON.stringify({
       article_ids: articleIds,

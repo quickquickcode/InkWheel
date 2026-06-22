@@ -11,9 +11,10 @@ import { Check, Copy, FileText } from "lucide-react";
 
 interface VariantTabsProps {
   post?: PostDraft;
+  usedLlm?: boolean;
 }
 
-export function VariantTabs({ post }: VariantTabsProps) {
+export function VariantTabs({ post, usedLlm }: VariantTabsProps) {
   const [activeTab, setActiveTab] = useState<PlatformId>("xiaohongshu");
   const [copied, setCopied] = useState(false);
 
@@ -80,7 +81,7 @@ export function VariantTabs({ post }: VariantTabsProps) {
           return (
             <TabsContent key={platform} value={platform} className="flex-1">
               {variant ? (
-                <VariantCard variant={variant} />
+                <VariantCard variant={variant} usedLlm={usedLlm} />
               ) : (
                 <Card className="h-full">
                   <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center text-sm text-muted-foreground">

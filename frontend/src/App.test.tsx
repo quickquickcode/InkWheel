@@ -155,6 +155,12 @@ describe("App workspace", () => {
       "fetch",
       vi.fn(async (url: string | URL) => {
         const path = typeof url === "string" ? url : url.pathname;
+        if (path.includes("/api/status")) {
+          return new Response(
+            JSON.stringify({ rss_available: true, opencode_available: false, topics: dashboard.topics, adapters: dashboard.adapters }),
+            { status: 200 },
+          );
+        }
         if (path.includes("/api/dashboard")) {
           return new Response(JSON.stringify(dashboard), { status: 200 });
         }
@@ -227,11 +233,11 @@ describe("App workspace", () => {
     render(<App />);
 
     expect(await screen.findByText("InkWheel")).toBeInTheDocument();
-    expect(screen.getByText("工作流总览与快捷操作")).toBeInTheDocument();
-    expect(screen.getByText("AI 智能体在教育场景的应用实践")).toBeInTheDocument();
+    expect(screen.getByText("工作流总览")).toBeInTheDocument();
+    expect(screen.getAllByText("AI 智能体在教育场景的应用实践").length).toBeGreaterThan(0);
     expect(screen.getAllByRole("button", { name: /采集/ }).length).toBeGreaterThan(0);
     expect(screen.getByRole("button", { name: /^AI 分析$/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^生成内容$/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^生成$/ })).toBeInTheDocument();
   });
 
   it("can navigate to studio and see generate actions", async () => {

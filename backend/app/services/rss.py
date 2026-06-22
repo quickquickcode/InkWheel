@@ -4,17 +4,50 @@ import hashlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 from xml.etree import ElementTree
 
 import feedparser
 import httpx
+from bs4 import BeautifulSoup
 
 from app.core.config import Settings, get_settings
 from app.models.schemas import ArticleItem, RssSource, TopicConfig
 from app.services.jobs import JobStatus, ProgressTracker
 from app.services.topics import topic_service
 from app.storage.repository import utc_now
+
+
+def _clean_html(html: str) -> dict[str, Any]:
+    """把 RSS 里的 HTML 清洗成纯文本，并提取图片。"""
+    if not html:
+        return {"text": "", "html": "", "images": []}
+
+    soup = BeautifulSoup(html, "lxml")
+
+    # 移除 script/style
+    for tag in soup(["script", "style", "noscript", "iframe"]):
+        tag.decompose()
+
+    # 提取图片
+    images: list[str] = []
+    for img in soup.find_all("img"):
+        src = img.get("src") or img.get("data-src")
+        if src and src.startswith("http"):
+            images.append(src)
+
+    # 块级标签前加换行，方便阅读
+    for tag in soup.find_all(["p", "br", "div", "h1", "h2", "h3", "h4", "li", "hr"]):
+        if tag.name in ("br", "hr"):
+            tag.replace_with("\n")
+        else:
+            tag.append("\n")
+
+    text = soup.get_text(separator="", strip=False)
+    # 合并多余空行
+    lines = [line.strip() for line in text.splitlines()]
+    text = "\n".join(line for line in lines if line)
+    return {"text": text, "html": html, "images": images[:10]}
 
 
 def _sha_id(*parts: str) -> str:
@@ -66,6 +99,11 @@ def _entry_to_article(entry: dict, source: RssSource) -> Optional[ArticleItem]:
     if not content:
         content = summary
 
+    cleaned = _clean_html(content)
+    text = cleaned["text"]
+    # summary 始终用纯文本且更短
+    plain_summary = _clean_html(summary)["text"][:300] if summary else (text[:300] if text else "")
+
     article_id = _sha_id(source.id, title, link)
     return ArticleItem(
         id=article_id,
@@ -73,8 +111,11 @@ def _entry_to_article(entry: dict, source: RssSource) -> Optional[ArticleItem]:
         source=source.name,
         source_id=source.id,
         url=link,
-        summary=summary[:500],
-        content=content[:2000],
+        summary=plain_summary,
+        content=text[:2000],
+        content_text=text[:3000],
+        content_html=cleaned["html"][:4000],
+        images=cleaned["images"],
         published_at=published_at,
         collected_at=utc_now(),
     )

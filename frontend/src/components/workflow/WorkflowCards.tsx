@@ -29,56 +29,38 @@ export function WorkflowCards() {
   })();
 
   return (
-    <Card className="col-span-8">
-      <CardHeader>
-        <CardTitle>工作流</CardTitle>
-        <CardDescription>当前所处阶段与下一步目标</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {workflowStages.map((stage) => {
-            const active = stage.id === currentStage;
-            return (
-              <button
-                key={stage.id}
-                type="button"
-                onClick={() => setCurrentView(stageToView[stage.id])}
-                className={cn(
-                  "relative flex flex-col items-start gap-3 rounded-lg border p-4 text-left transition-all hover:shadow-md",
-                  active
-                    ? "border-primary bg-primary/5 text-primary"
-                    : "border-border bg-card text-foreground hover:bg-accent/50"
-                )}
-              >
-                <span
-                  className={cn(
-                    "flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold",
-                    active
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground"
-                  )}
-                >
-                  {stage.step}
-                </span>
-                <div>
-                  <div className="text-sm font-semibold">{stage.title}</div>
-                  <div
-                    className={cn(
-                      "mt-1 text-xs",
-                      active ? "text-primary/80" : "text-muted-foreground"
-                    )}
-                  >
-                    {stage.description}
-                  </div>
-                </div>
-                {active && (
-                  <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-primary" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="grid grid-cols-4 gap-2">
+      {workflowStages.map((stage) => {
+        const active = stage.id === currentStage;
+        return (
+          <button
+            key={stage.id}
+            type="button"
+            onClick={() => setCurrentView(stageToView[stage.id])}
+            className={cn(
+              "relative flex items-center gap-2 rounded-md border px-3 py-2 text-left transition-all",
+              active
+                ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                : "border-border bg-card text-foreground hover:bg-accent/50"
+            )}
+          >
+            <span
+              className={cn(
+                "flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold",
+                active
+                  ? "bg-primary-foreground text-primary"
+                  : "bg-muted text-muted-foreground"
+              )}
+            >
+              {stage.step}
+            </span>
+            <span className="text-xs font-medium">{stage.title}</span>
+            {active && (
+              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-primary-foreground" />
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 }

@@ -34,6 +34,9 @@ export type ArticleItem = {
   url?: string | null;
   summary?: string | null;
   content?: string | null;
+  content_text?: string | null;
+  content_html?: string | null;
+  images?: string[];
   published_at?: string | null;
   collected_at: string;
   topic_id?: string | null;
@@ -59,6 +62,7 @@ export type PostDraft = {
   status: "generated" | "previewed" | "draft_only";
   variants: ContentVariant[];
   created_at: string;
+  used_llm?: boolean;
 };
 
 export type AdapterStatus = {

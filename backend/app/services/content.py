@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from abc import ABC, abstractmethod
 from uuid import uuid4
 from typing import Optional
@@ -22,7 +23,65 @@ class ContentGenerator(ABC):
         raise NotImplementedError
 
 
+def _extract_tags(title: str, summary: str = "") -> list[str]:
+    """从标题和摘要中提取关键词作为标签，不再使用固定课程实验标签。"""
+    text = f"{title} {summary}"
+    # 常见科技/AI/商业热点词库
+    candidates = [
+        "AI", "大模型", "人工智能", "OpenAI", "ChatGPT", "Agent", "智能体",
+        "算力", "芯片", "英伟达", "NVIDIA", "苹果", "特斯拉", "新能源",
+        "自动驾驶", "机器人", "云计算", "开源", "Python", "开发者",
+        "小红书", "抖音", "视频号", "微信", "电商", "直播", "带货",
+        "教育", "医疗", "金融", "游戏", "电影", "娱乐", "科技",
+        "创业", "投资", "融资", "IPO", "美股", "A股", "宏观经济",
+    ]
+    found = [kw for kw in candidates if kw.lower() in text.lower() or kw in text]
+    # 补充通用标签
+    generics = ["热点观察", "今日话题"]
+    tags = (found + generics)[:5]
+    return tags if tags else generics
+
+
+def _emoji_for(title: str) -> str:
+    """根据标题关键词给小红书配几个 emoji。"""
+    mapping = {
+        "AI": "🤖",
+        "大模型": "🧠",
+        "芯片": "💻",
+        "英伟达": "🎮",
+        "苹果": "🍎",
+        "特斯拉": "🚗",
+        "新能源": "🔋",
+        "自动驾驶": "🚙",
+        "机器人": "🦾",
+        "开源": "🔓",
+        "创业": "🚀",
+        "投资": "📈",
+        "教育": "📚",
+        "医疗": "🏥",
+        "游戏": "🎮",
+        "电影": "🎬",
+        "小红书": "📕",
+        "抖音": "🎵",
+        "微信": "💬",
+        "电商": "🛒",
+        "直播": "📺",
+        "热点": "🔥",
+    }
+    emojis = []
+    for kw, emoji in mapping.items():
+        if kw in title:
+            emojis.append(emoji)
+        if len(emojis) >= 3:
+            break
+    if not emojis:
+        emojis = ["🔥", "💡", "👀"]
+    return " ".join(emojis[:3])
+
+
 class TemplateContentGenerator(ContentGenerator):
+    """LLM 不可用时的兜底生成器，产出可直接发布的真实平台文案。"""
+
     def generate(
         self,
         source: ArticleItem,
@@ -41,68 +100,68 @@ class TemplateContentGenerator(ContentGenerator):
     def _variant_for(
         self, platform: PlatformId, source: ArticleItem
     ) -> ContentVariant:
-        tags = self._tags_for(source)
-        pub_time = getattr(source, "published_at", None) or "近期发布"
+        tags = _extract_tags(source.title, source.summary or "")
+        summary = (source.summary or source.content or source.content_text or "")[:200]
         src = getattr(source, "source", "网络")
 
         if platform == PlatformId.xiaohongshu:
+            emojis = _emoji_for(source.title)
             return ContentVariant(
                 platform=platform,
-                title=f"{source.title[:22]}",
+                title=source.title[:22],
                 body=(
-                    f"{source.title} 正在成为今天值得观察的内容实验样本。\n\n"
-                    "我们可以从三个角度拆解：它为什么突然升温、普通用户会关心什么、"
-                    "课程实验里怎样把热点转成可验证的内容方案。\n\n"
+                    f"{emojis}\n\n"
+                    f"刚看到这条消息：{source.title}\n\n"
+                    f"{summary}\n\n"
+                    "大家觉得这件事后续会怎么发展？评论区聊聊 👇\n\n"
                     f"{' '.join('#' + tag for tag in tags)}"
                 ),
                 tags=tags,
-                image_prompt=f"干净的教育科技风封面图，主题：{source.title}",
-                estimated_read="86 字",
+                image_prompt=f"高清封面图，现代科技感，主题：{source.title}",
+                estimated_read="120 字",
             )
         if platform == PlatformId.toutiao:
             return ContentVariant(
                 platform=platform,
-                title=f"{source.title}｜微头条",
+                title=f"{source.title}｜热点观察",
                 body=(
                     f"【今日观察】{source.title}\n\n"
-                    f"来源：{src}，发布时间：{pub_time}。"
-                    "这类内容适合作为课堂实验素材：先看事实，再拆受众问题，"
-                    "最后用微头条的短评节奏做人工审核与发布确认。"
+                    f"{summary}\n\n"
+                    f"来源：{src}。这件事值得关注，原因有三："
+                    "一是事件本身影响面正在扩大，二是相关行业可能因此被重新估值，"
+                    "三是普通读者也能从中看到趋势信号。\n\n"
+                    "你怎么看？欢迎在评论区留下观点。"
                 ),
                 tags=tags,
-                estimated_read="微头条 120 字",
+                estimated_read="微头条 180 字",
             )
         return ContentVariant(
             platform=platform,
-            title=f"{source.title}：一次内容运营实验",
+            title=source.title,
             body=(
                 "---\n"
-                f"title: {source.title}：一次内容运营实验\n"
-                f"digest: 从热点采集到多平台预览，拆解 {source.title} 的内容生成流程。\n"
-                "author: CyberLab\n"
+                f"title: {source.title}\n"
+                f"digest: {summary}\n"
+                "author: InkWheel\n"
                 "---\n\n"
                 f"# {source.title}\n\n"
-                "## 1. 文章背景\n"
-                f"文章来源：{src}，发布时间：{pub_time}。\n\n"
-                "## 2. 可转化角度\n"
-                "围绕事实、受众问题和平台表达方式构建内容版本。\n\n"
-                "## 3. 实验任务\n"
-                "学生需要比较小红书、今日头条、微信公众号三种表达结构的差异。\n"
+                "## 热点背景\n\n"
+                f"{summary}\n\n"
+                f"来源：{src}\n\n"
+                "## 核心观点\n\n"
+                f"{source.title} 反映出当前行业正在经历一轮重要变化。"
+                "对于关注这一领域的读者来说，需要把握两个关键点："
+                "事件本身的直接意义，以及它可能带来的连锁反应。\n\n"
+                "## 对读者的价值\n\n"
+                "无论你是从业者还是普通关注者，都可以从这条消息中提炼出可复用的判断框架："
+                "先看事实，再辨信号，最后结合自身场景做决策。\n\n"
+                "---\n\n"
+                "*本文由 InkWheel 基于公开资料整理生成，仅供参考。*"
             ),
             tags=tags,
-            image_prompt=f"公众号文章头图，主题：{source.title}",
+            image_prompt=f"公众号头图，简洁大气，主题：{source.title}",
             estimated_read="3 分钟",
         )
-
-    def _tags_for(self, source: ArticleItem) -> list[str]:
-        title = source.title
-        src = getattr(source, "source", "")
-        base = ["AI教育", "智能体", "内容运营", "课程实验"]
-        if "小红书" in title:
-            base = ["小红书运营", "平台规则", "内容实验", "热点追踪"]
-        elif "开源" in title or src == "Hacker News":
-            base = ["开源项目", "技术趋势", "AI工具", "课程实验"]
-        return base[:4]
 
     def generate_fused(
         self,
@@ -110,67 +169,74 @@ class TemplateContentGenerator(ContentGenerator):
         platforms: list[PlatformId],
         user_prompt: Optional[str] = None,
     ) -> PostDraft:
-        tags = self._tags_for(sources[0])
+        tags = _extract_tags(sources[0].title, sources[0].summary or "")
         titles = [s.title for s in sources]
         summaries = [
-            (getattr(s, "summary", None) or getattr(s, "content", "") or "")[:200]
+            (getattr(s, "summary", None) or getattr(s, "content", "") or "")[:160]
             for s in sources
         ]
-        idea = user_prompt or "围绕上述资料生成跨平台内容"
+        idea = user_prompt or "围绕热点资料输出跨平台内容"
 
         variants: list[ContentVariant] = []
         for platform in platforms:
             if platform == PlatformId.xiaohongshu:
+                emojis = _emoji_for(sources[0].title)
                 variants.append(
                     ContentVariant(
                         platform=platform,
-                        title=f"{titles[0][:18]}等 {len(sources)} 篇资料观察",
+                        title=f"{sources[0].title[:16]}等热点观察",
                         body=(
-                            f"综合 {len(sources)} 篇资料，聊聊 {titles[0]} 等话题。\n\n"
-                            f"用户想表达：{idea}\n\n"
-                            "资料要点：\n"
-                            + "\n".join(f"• {t}" for t in titles)
-                            + f"\n\n{' '.join('#' + tag for tag in tags)}"
+                            f"{emojis}\n\n"
+                            f"综合 {len(sources)} 条消息，聊聊 {sources[0].title[:16]}：\n\n"
+                            + "\n".join(f"• {t}" for t in titles[:4])
+                            + f"\n\n{idea}\n\n"
+                            "有在关注这方面的朋友吗？一起交流 👇\n\n"
+                            f"{' '.join('#' + tag for tag in tags)}"
                         ),
                         tags=tags,
-                        image_prompt=f"内容融合封面，主题：{titles[0]}",
-                        estimated_read="120 字",
+                        image_prompt=f"融合热点封面图，主题：{sources[0].title}",
+                        estimated_read="150 字",
                     )
                 )
             elif platform == PlatformId.toutiao:
                 variants.append(
                     ContentVariant(
                         platform=platform,
-                        title=f"{titles[0]}等 {len(sources)} 篇资料微头条",
+                        title=f"{sources[0].title}｜多源观察",
                         body=(
-                            f"【融合观察】基于 {len(sources)} 篇资料：\n\n"
-                            + "\n".join(f"{i+1}. {t}" for i, t in enumerate(titles))
-                            + f"\n\n创作角度：{idea}\n\n"
-                            "适合做成微头条短评，先抛趋势，再给判断，最后留给读者讨论。"
+                            f"【融合观察】基于 {len(sources)} 条消息：\n\n"
+                            + "\n".join(f"{i+1}. {t}" for i, t in enumerate(titles[:4]))
+                            + f"\n\n{idea}\n\n"
+                            "把多方信息放一起看，能发现单一消息看不到的脉络。"
+                            "这件事还在发酵，值得持续跟踪。"
                         ),
                         tags=tags,
-                        estimated_read="微头条 150 字",
+                        estimated_read="微头条 200 字",
                     )
                 )
             else:
                 variants.append(
                     ContentVariant(
                         platform=platform,
-                        title=f"{titles[0]}：融合内容运营实验",
+                        title=f"{sources[0].title}：多源解读",
                         body=(
                             "---\n"
-                            f"title: {titles[0]}：融合内容运营实验\n"
-                            f"digest: 基于 {len(sources)} 篇资料的跨平台内容生成实验。\n"
-                            "author: CyberLab\n"
+                            f"title: {sources[0].title}：多源解读\n"
+                            f"digest: 基于 {len(sources)} 条消息的跨平台内容整理。\n"
+                            "author: InkWheel\n"
                             "---\n\n"
-                            "# 资料来源\n\n"
-                            + "\n".join(f"- {t}" for t in titles)
-                            + f"\n\n# 创作意图\n\n{idea}\n\n"
-                            "# 实验任务\n\n"
-                            "比较小红书、今日头条、微信公众号三种表达结构的差异。\n"
+                            "# 消息来源\n\n"
+                            + "\n".join(f"- {t}" for t in titles[:4])
+                            + f"\n\n# 核心观察\n\n{idea}\n\n"
+                            "# 值得关注的原因\n\n"
+                            "1. 多源交叉验证，信息可信度更高。\n"
+                            "2. 事件影响面可能超出单一平台热度。\n"
+                            "3. 对行业判断和日常决策都有参考价值。\n\n"
+                            "---\n\n"
+                            "*本文由 InkWheel 基于公开资料整理生成，仅供参考。*"
                         ),
                         tags=tags,
-                        image_prompt=f"公众号文章头图，主题：{titles[0]}",
+                        image_prompt=f"公众号头图，主题：{sources[0].title}",
                         estimated_read="3 分钟",
                     )
                 )

@@ -7,7 +7,7 @@ import { PublishingView } from "@/views/PublishingView";
 import { LogsView } from "@/views/LogsView";
 import { useAppStore } from "@/store/app-store";
 import { useCollection } from "@/hooks/use-collection";
-import { getDashboard } from "@/lib/api";
+import { getDashboard, getStatus } from "@/lib/api";
 import { messageOf } from "@/lib/utils";
 
 export function App() {
@@ -23,10 +23,18 @@ export function App() {
     async function load() {
       store.setIsLoading(true);
       try {
-        const dashboard = await getDashboard();
+        const [dashboard, status] = await Promise.all([getDashboard(), getStatus()]);
         store.setDashboard(dashboard);
+        store.setLlmAvailable(status.opencode_available);
         store.setActivePostId(dashboard.posts[0]?.id);
         store.setPublishPostId(dashboard.posts[0]?.id);
+
+        // 恢复历史生成记录的 LLM 状态
+        dashboard.posts.forEach((post) => {
+          if (post.used_llm !== undefined) {
+            store.setPostUsedLlm(post.id, post.used_llm);
+          }
+        });
 
         const firstTopic = dashboard.topics[0];
         if (firstTopic) {
