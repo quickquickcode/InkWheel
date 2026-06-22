@@ -85,7 +85,7 @@ export function StudioView() {
       </div>
 
       <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-4 lg:overflow-hidden">
-        <div className="min-h-[240px] h-[min(680px,75vh)] min-w-0 lg:min-h-0">
+        <div className="min-h-[240px] h-[680px] max-h-[75vh] min-w-0 lg:min-h-0">
           <ArticleSelector
             articles={articles}
             selectedArticleIds={selectedArticleIds}
@@ -93,7 +93,7 @@ export function StudioView() {
           />
         </div>
 
-        <div className="min-h-[360px] h-[min(680px,75vh)] min-w-0 lg:col-span-2 lg:min-h-0">
+        <div className="min-h-[360px] h-[680px] max-h-[75vh] min-w-0 lg:col-span-2 lg:min-h-0">
           <ArticleReader
             article={selectedArticle}
             analysis={analysis}
@@ -101,7 +101,7 @@ export function StudioView() {
           />
         </div>
 
-        <div className="flex min-h-[320px] min-w-0 flex-col gap-3 lg:min-h-0">
+        <div className="flex min-h-[320px] h-[680px] max-h-[75vh] min-w-0 flex-col gap-3 lg:min-h-0">
           <Card>
             <CardContent className="space-y-3 p-4">
               <div className="flex items-center justify-between">
