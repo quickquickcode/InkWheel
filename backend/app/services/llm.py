@@ -127,9 +127,9 @@ class LLMContentGenerator:
     ) -> tuple[ArticleAnalysis, LLMUsage]:
         # 若文章已绑定话题且未显式传入，使用文章话题
         effective_topic = topic_id or article.topic_id
-        raw_summary = article.summary or article.content or ""
-        # 截断避免 prompt 过长导致 opencode run 变慢
-        summary = raw_summary[:800] if len(raw_summary) > 800 else raw_summary
+        raw_summary = article.content_text or article.content or article.summary or ""
+        # 保留更多上下文：优先使用清洗后的正文，最多 4000 字符
+        summary = raw_summary[:4000] if len(raw_summary) > 4000 else raw_summary
         prompt = _load_prompt("analyze_article", topic_id=effective_topic).format(
             title=article.title,
             source=article.source,
@@ -154,6 +154,7 @@ class LLMContentGenerator:
             audience=data.get("audience", ""),
             suitable_platforms=platforms,
             tone=data.get("tone", ""),
+            angles=data.get("angles", []),
             model=usage.model,
         )
         return analysis, usage
@@ -206,8 +207,14 @@ class LLMContentGenerator:
     ) -> tuple[PostDraft, LLMUsage]:
         effective_topic = topic_id or source.topic_id
         title = source.title
-        raw_summary = getattr(source, "summary", None) or getattr(source, "content", "") or ""
-        summary = raw_summary[:800] if len(raw_summary) > 800 else raw_summary
+        raw_summary = (
+            getattr(source, "content_text", None)
+            or getattr(source, "content", "")
+            or getattr(source, "summary", "")
+            or ""
+        )
+        # 给 LLM 更充足的上下文，提升生成质量与长度
+        summary = raw_summary[:4000] if len(raw_summary) > 4000 else raw_summary
         source_id = source.id
         source_kind = "article"
 
@@ -284,7 +291,8 @@ class LLMContentGenerator:
             )
 
         sources_text = "\n\n".join(
-            f"{idx}. 《{s.title}》\n来源：{getattr(s, 'source', '未知')}\n摘要：{getattr(s, 'summary', '') or getattr(s, 'content', '')[:300]}"
+            f"{idx}. 《{s.title}》\n来源：{getattr(s, 'source', '未知')}\n"
+            f"正文：{(getattr(s, 'content_text', None) or getattr(s, 'content', '') or getattr(s, 'summary', ''))[:1200]}"
             for idx, s in enumerate(sources, 1)
         )
         prompt = _load_prompt("generate_fused", topic_id=topic_id).format(

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAnalysis } from "@/hooks/use-analysis";
 import { articleExcerpt, formatDate, platformLabels } from "@/lib/utils";
-import { Sparkles, FileText, Lightbulb, Users, Tag, ListOrdered, Fingerprint, ImageIcon } from "lucide-react";
+import { Sparkles, FileText, Lightbulb, Users, Tag, ListOrdered, Fingerprint, ImageIcon, Target } from "lucide-react";
 
 interface ArticleReaderProps {
   article?: ArticleItem;
@@ -78,7 +78,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+              <p className="break-words whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
                 {article.content_text || article.content || article.summary || "暂无正文或摘要"}
               </p>
               {article.images && article.images.length > 0 && (
@@ -194,6 +194,23 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
                       </Badge>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {analysis.angles && analysis.angles.length > 0 && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    <Target size={14} className="text-slate-500" />
+                    传播角度
+                  </div>
+                  <ul className="space-y-1">
+                    {analysis.angles.map((angle, index) => (
+                      <li key={index} className="flex gap-2 text-sm text-muted-foreground">
+                        <span className="shrink-0 text-xs text-slate-400">{index + 1}.</span>
+                        <span>{angle}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
 

@@ -66,8 +66,8 @@ class PostDraft(BaseModel):
     id: str
     source_id: str
     source_title: str
-    source_kind: Literal["article"] = "article"
-    status: Literal["generated", "previewed", "draft_only"] = "generated"
+    source_kind: Literal["article", "fused"] = "article"
+    status: Literal["generated", "previewed", "draft_only", "published"] = "generated"
     variants: list[ContentVariant]
     created_at: str
 
@@ -192,6 +192,7 @@ class ArticleAnalysis(BaseModel):
     audience: str
     suitable_platforms: list[PlatformId]
     tone: str
+    angles: list[str] = []
     model: str
 
 

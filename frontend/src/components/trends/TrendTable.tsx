@@ -106,7 +106,7 @@ export function TrendTable({ rankingItems, isLoading }: TrendTableProps) {
                   >
                     <TableCell className="font-medium">{rank}</TableCell>
                     <TableCell>
-                      <div className="max-w-[240px] truncate text-sm font-medium">
+                      <div className="min-w-[200px] max-w-[420px] whitespace-normal text-sm font-medium leading-snug">
                         {article.title}
                       </div>
                     </TableCell>

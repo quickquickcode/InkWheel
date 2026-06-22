@@ -58,8 +58,8 @@ export type PostDraft = {
   id: string;
   source_id: string;
   source_title: string;
-  source_kind: "article";
-  status: "generated" | "previewed" | "draft_only";
+  source_kind: "article" | "fused";
+  status: "generated" | "previewed" | "draft_only" | "published";
   variants: ContentVariant[];
   created_at: string;
   used_llm?: boolean;
@@ -161,6 +161,7 @@ export type ArticleAnalysis = {
   audience: string;
   suitable_platforms: PlatformId[];
   tone: string;
+  angles: string[];
   model: string;
 };
 

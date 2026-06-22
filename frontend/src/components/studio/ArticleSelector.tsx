@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { articleExcerpt } from "@/lib/utils";
-import { FileText, Layers } from "lucide-react";
+import { FileText, Layers, CheckSquare } from "lucide-react";
 
 interface ArticleSelectorProps {
   articles: ArticleItem[];
@@ -26,10 +26,18 @@ export function ArticleSelector({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-base">资料池</CardTitle>
-            <CardDescription>选择文章进行阅读与生成</CardDescription>
+            <CardDescription>
+              共 {articles.length} 篇文章 · 已选 {selectedArticleIds.length} 篇
+            </CardDescription>
           </div>
           <Layers size={16} className="text-muted-foreground" />
         </div>
+        {selectedArticleIds.length > 1 && (
+          <div className="mt-2 flex items-center gap-2 rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">
+            <CheckSquare size={12} />
+            已选择 {selectedArticleIds.length} 篇文章，可点击“融合生成”
+          </div>
+        )}
       </CardHeader>
       <CardContent className="flex-1 pt-0">
         {articles.length === 0 ? (
@@ -57,7 +65,7 @@ export function ArticleSelector({
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <h4
-                            className={`truncate text-sm font-medium ${
+                            className={`break-words text-sm font-medium leading-snug ${
                               isActive ? "text-primary" : "text-foreground"
                             }`}
                           >
@@ -71,6 +79,11 @@ export function ArticleSelector({
                           {article.score > 0 && (
                             <Badge variant="secondary" className="text-[10px]">
                               热度 {Math.round(article.score * 100)}
+                            </Badge>
+                          )}
+                          {isSelected && (
+                            <Badge variant="default" className="text-[10px]">
+                              已选
                             </Badge>
                           )}
                         </div>
