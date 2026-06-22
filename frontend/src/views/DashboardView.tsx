@@ -150,6 +150,7 @@ export function DashboardView() {
                     <Tabs
                       value={previewPlatform}
                       onValueChange={(v) => setPreviewPlatform(v as PlatformId)}
+                      className="flex flex-1 flex-col"
                     >
                       <TabsList className="grid h-7 w-full grid-cols-3">
                         {platformOrder.map((platform) => (
