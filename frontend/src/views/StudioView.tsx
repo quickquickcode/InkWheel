@@ -51,7 +51,7 @@ export function StudioView() {
       </div>
 
       <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-4 lg:overflow-hidden">
-        <div className="min-h-[240px] lg:min-h-0">
+        <div className="min-h-[240px] h-[min(680px,75vh)] lg:min-h-0">
           <ArticleSelector
             articles={articles}
             selectedArticleIds={selectedArticleIds}
@@ -59,7 +59,7 @@ export function StudioView() {
           />
         </div>
 
-        <div className="min-h-[360px] lg:col-span-2 lg:min-h-0">
+        <div className="min-h-[360px] h-[min(680px,75vh)] lg:col-span-2 lg:min-h-0">
           <ArticleReader
             article={selectedArticle}
             analysis={analysis}

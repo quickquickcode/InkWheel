@@ -9,7 +9,7 @@ interface SourceFilterProps {
 
 export function SourceFilter({ rssSources }: SourceFilterProps) {
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col h-[420px]">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-semibold">源站筛选</CardTitle>

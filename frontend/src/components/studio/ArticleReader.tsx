@@ -41,7 +41,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <Card>
+      <Card className="flex max-h-[45%] flex-col overflow-hidden">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
@@ -68,7 +68,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 overflow-auto">
           {analyzing ? (
             <div className="space-y-3">
               <Skeleton className="h-4 w-full" />
@@ -114,7 +114,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
         </CardContent>
       </Card>
 
-      <Card className="flex-1">
+      <Card className="flex flex-1 flex-col overflow-hidden">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Lightbulb size={16} className="text-amber-500" />
@@ -124,7 +124,7 @@ export function ArticleReader({ article, analysis, topicId }: ArticleReaderProps
             {analysis ? "基于文章内容的结构化洞察" : "点击上方“AI 分析”按钮生成洞察"}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 overflow-auto">
           {!analysis ? (
             <div className="space-y-3">
               <Skeleton className="h-4 w-full" />

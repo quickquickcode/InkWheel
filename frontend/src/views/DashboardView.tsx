@@ -123,13 +123,13 @@ export function DashboardView() {
       <div className="grid grid-cols-12 gap-3">
         {/* Main: trends + preview */}
         <div className="col-span-12 lg:col-span-8 xl:col-span-9 grid grid-cols-12 gap-3">
-          <div className="col-span-12 xl:col-span-6">
+          <div className="col-span-12 xl:col-span-6 h-[min(520px,65vh)]">
             <TrendTable
               rankingItems={rankingItems}
               isLoading={isLoading && rankingItems.length === 0}
             />
           </div>
-          <div className="col-span-12 xl:col-span-6">
+          <div className="col-span-12 xl:col-span-6 h-[min(520px,65vh)]">
             <Card className="h-full">
               <CardContent className="flex h-full flex-col p-3">
                 <div className="mb-2 flex items-center justify-between">

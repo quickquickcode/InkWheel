@@ -44,7 +44,7 @@ export function TrendTable({ rankingItems, isLoading }: TrendTableProps) {
           <Newspaper size={16} className="text-muted-foreground" />
         </div>
       </CardHeader>
-      <CardContent className="flex-1">
+      <CardContent className="flex-1 overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>

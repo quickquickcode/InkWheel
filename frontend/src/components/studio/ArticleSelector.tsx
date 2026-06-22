@@ -38,7 +38,7 @@ export function ArticleSelector({
             暂无文章，请先在趋势洞察页面采集
           </div>
         ) : (
-          <ScrollArea className="h-[calc(100%-1rem)]">
+          <ScrollArea className="h-full">
             <div className="space-y-2 pr-3">
               {articles.map((article) => {
                 const isSelected = selectedArticleIds.includes(article.id);
