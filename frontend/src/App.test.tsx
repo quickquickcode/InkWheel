@@ -57,11 +57,11 @@ const dashboard: DashboardState = {
       source_id: "rss_hackernews",
       url: "https://example.com/article",
       summary: "关于 AI 智能体在教育场景的应用实践文章摘要。",
-      content: null,
+      content: "关于 AI 智能体在教育场景的应用实践正文内容。",
       published_at: "2026-06-15T10:00:00.000Z",
       collected_at: "2026-06-15T12:00:00.000Z",
       topic_id: "ai-llm",
-      score: 0,
+      score: 0.85,
       rank: 1,
     },
   ],
@@ -141,8 +141,16 @@ const dashboard: DashboardState = {
   repos: [],
 };
 
-describe("App ink workspace", () => {
+describe("App workspace", () => {
   beforeEach(() => {
+    vi.stubGlobal(
+      "ResizeObserver",
+      class ResizeObserver {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
     vi.stubGlobal(
       "fetch",
       vi.fn(async (url: string | URL) => {
@@ -173,8 +181,15 @@ describe("App ink workspace", () => {
             { status: 200 },
           );
         }
-        if (path.includes("/api/rss/collect-by-topic-async") || path.includes("/api/content/generate-async") || path.includes("/api/content/generate-fused-async")) {
-          return new Response(JSON.stringify({ job_id: "job_test_1", title: "测试任务", status: "completed" }), { status: 200 });
+        if (
+          path.includes("/api/rss/collect-by-topic-async") ||
+          path.includes("/api/content/generate-async") ||
+          path.includes("/api/content/generate-fused-async")
+        ) {
+          return new Response(
+            JSON.stringify({ job_id: "job_test_1", title: "测试任务", status: "completed" }),
+            { status: 200 },
+          );
         }
         if (path.includes("/api/articles/")) {
           return new Response(JSON.stringify(dashboard.articles[0]), { status: 200 });
@@ -190,7 +205,11 @@ describe("App ink workspace", () => {
         constructor() {
           setTimeout(() => {
             if (this.onmessage) {
-              this.onmessage(new MessageEvent("message", { data: JSON.stringify({ status: "completed" }) }));
+              this.onmessage(
+                new MessageEvent("message", {
+                  data: JSON.stringify({ status: "completed" }),
+                }),
+              );
             }
           }, 0);
         }
@@ -204,42 +223,39 @@ describe("App ink workspace", () => {
     vi.unstubAllGlobals();
   });
 
-  it("renders the new single-surface workflow", async () => {
+  it("renders the new workspace with dashboard", async () => {
     render(<App />);
 
-    expect(await screen.findByText("POP CONTENT LAB")).toBeInTheDocument();
-    expect(screen.getByText("AI 与大模型 热榜")).toBeInTheDocument();
-    expect(screen.getByText("文章预览")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /内容生成/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /发布管理/ })).toBeInTheDocument();
-    expect(screen.getAllByText("AI 智能体在教育场景的应用实践").length).toBeGreaterThan(0);
+    expect(await screen.findByText("InkWheel")).toBeInTheDocument();
+    expect(screen.getByText("工作流总览与快捷操作")).toBeInTheDocument();
+    expect(screen.getByText("AI 智能体在教育场景的应用实践")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /采集/ }).length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: /^AI 分析$/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^生成内容$/ })).toBeInTheDocument();
   });
 
-  it("can select an article and see generate actions", async () => {
+  it("can navigate to studio and see generate actions", async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect((await screen.findAllByText("POP CONTENT LAB")).length).toBeGreaterThan(0);
+    await screen.findByText("InkWheel");
+    await user.click(screen.getAllByRole("button", { name: /^内容工作室$/ })[0]);
 
-    await user.click(screen.getByRole("button", { name: /AI 智能体在教育场景的应用实践/ }));
-
-    expect(screen.getByRole("button", { name: /生成内容/ })).toBeInTheDocument();
+    expect(screen.getByText("阅读资料、AI 分析并生成多平台文案")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /单篇生成/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /融合生成/ })).toBeInTheDocument();
   });
 
-  it("shows a clear Toutiao account and micro-post publish path", async () => {
+  it("shows publishing view with Toutiao account settings", async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await screen.findByText("POP CONTENT LAB");
-    await user.click(screen.getByRole("button", { name: /发布管理/ }));
+    await screen.findByText("InkWheel");
+    await user.click(screen.getAllByRole("button", { name: /^发布管理$/ })[0]);
 
-    expect(screen.getByLabelText("待发布文案")).toBeInTheDocument();
-
-    await user.click(screen.getByTestId("publish-adapter-toutiao"));
-
-    expect(screen.getByText("今日头条账号")).toBeInTheDocument();
-    expect(screen.getAllByText("教育智能体实践｜微头条").length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: /打开浏览器发微头条/ })).toBeInTheDocument();
-    expect(screen.getByDisplayValue("AI教育 智能体")).toBeInTheDocument();
+    expect(screen.getByText("平台适配器状态、预览执行与账号配置")).toBeInTheDocument();
+    expect(screen.getByText("发布预览与执行")).toBeInTheDocument();
+    expect(screen.getByText("管理今日头条等平台的登录凭据")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /打开浏览器登录/ })).toBeInTheDocument();
   });
 });

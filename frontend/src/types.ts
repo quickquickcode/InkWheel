@@ -1,6 +1,6 @@
 export type PlatformId = "xiaohongshu" | "toutiao" | "wechat";
 
-export type ViewId = "discovery" | "studio" | "publishing" | "logs";
+export type ViewId = "dashboard" | "trends" | "studio" | "publishing" | "logs";
 
 export type TopicConfig = {
   id: string;
@@ -175,4 +175,17 @@ export type JobProgressData = {
   error?: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type Toast = {
+  id: string;
+  title?: string;
+  message: string;
+  status?: "success" | "error" | "warning" | "info";
+};
+
+export type AsyncJobStart = {
+  job_id: string;
+  title: string;
+  status: JobStatus;
 };

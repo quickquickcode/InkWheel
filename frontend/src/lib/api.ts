@@ -4,6 +4,7 @@ import type {
   AdapterStatus,
   ArticleAnalysis,
   ArticleItem,
+  AsyncJobStart,
   DashboardState,
   JobEvent,
   JobProgressData,
@@ -14,7 +15,7 @@ import type {
   RepoStatus,
   RssSource,
   TopicConfig,
-} from "../types";
+} from "@/types";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000";
 
@@ -28,6 +29,15 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(text || `Request failed: ${response.status}`);
   }
   return response.json() as Promise<T>;
+}
+
+export function getStatus() {
+  return api<{
+    rss_available: boolean;
+    opencode_available: boolean;
+    topics: TopicConfig[];
+    adapters: AdapterStatus[];
+  }>("/api/status");
 }
 
 export function getDashboard() {
@@ -59,19 +69,21 @@ export function collectRssByTopic(topicId: string, keyword?: string, days?: numb
   });
 }
 
-export function collectRssByTopicAsync(topicId: string, keyword?: string, days?: number, limit?: number) {
-  return api<{ job_id: string; title: string; status: JobProgressData["status"] }>(
-    "/api/rss/collect-by-topic-async",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        topic_id: topicId,
-        keyword: keyword?.trim() || null,
-        days,
-        limit,
-      }),
-    },
-  );
+export function collectRssByTopicAsync(
+  topicId: string,
+  keyword?: string,
+  days?: number,
+  limit?: number,
+) {
+  return api<AsyncJobStart>("/api/rss/collect-by-topic-async", {
+    method: "POST",
+    body: JSON.stringify({
+      topic_id: topicId,
+      keyword: keyword?.trim() || null,
+      days,
+      limit,
+    }),
+  });
 }
 
 export function getRankings(topicId: string, limit = 10) {
@@ -85,13 +97,14 @@ export function getArticle(articleId: string) {
 }
 
 export function analyzeArticle(articleId: string, topicId?: string) {
-  return api<{ analysis: ArticleAnalysis; usage: { prompt_tokens: number; completion_tokens: number; model: string }; job: JobEvent }>(
-    "/api/content/analyze",
-    {
-      method: "POST",
-      body: JSON.stringify({ article_id: articleId, topic_id: topicId }),
-    },
-  );
+  return api<{
+    analysis: ArticleAnalysis;
+    usage: { prompt_tokens: number; completion_tokens: number; model: string };
+    job: JobEvent;
+  }>("/api/content/analyze", {
+    method: "POST",
+    body: JSON.stringify({ article_id: articleId, topic_id: topicId }),
+  });
 }
 
 export function generateContent({
@@ -127,18 +140,15 @@ export function generateContentAsync({
   useLlm?: boolean;
   topicId?: string;
 }) {
-  return api<{ job_id: string; title: string; status: JobProgressData["status"] }>(
-    "/api/content/generate-async",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        article_id: articleId,
-        platforms,
-        use_llm: useLlm ?? false,
-        topic_id: topicId,
-      }),
-    },
-  );
+  return api<AsyncJobStart>("/api/content/generate-async", {
+    method: "POST",
+    body: JSON.stringify({
+      article_id: articleId,
+      platforms,
+      use_llm: useLlm ?? false,
+      topic_id: topicId,
+    }),
+  });
 }
 
 export function generateContentFused({
@@ -179,19 +189,16 @@ export function generateContentFusedAsync({
   topicId?: string;
   userPrompt?: string;
 }) {
-  return api<{ job_id: string; title: string; status: JobProgressData["status"] }>(
-    "/api/content/generate-fused-async",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        article_ids: articleIds,
-        platforms,
-        use_llm: useLlm ?? false,
-        topic_id: topicId,
-        user_prompt: userPrompt?.trim() || null,
-      }),
-    },
-  );
+  return api<AsyncJobStart>("/api/content/generate-fused-async", {
+    method: "POST",
+    body: JSON.stringify({
+      article_ids: articleIds,
+      platforms,
+      use_llm: useLlm ?? false,
+      topic_id: topicId,
+      user_prompt: userPrompt?.trim() || null,
+    }),
+  });
 }
 
 export function getJob(jobId: string) {
@@ -283,16 +290,19 @@ export function loginToutiaoAccount() {
 }
 
 export function publishToutiaoMicro(postId: string, topic?: string) {
-  return api<{ job_id: string; title: string; status: JobProgressData["status"]; command: string; artifact_path: string }>(
-    "/api/publish/toutiao/micro",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        post_id: postId,
-        topic: topic?.trim() || null,
-      }),
-    },
-  );
+  return api<{
+    job_id: string;
+    title: string;
+    status: JobProgressData["status"];
+    command: string;
+    artifact_path: string;
+  }>("/api/publish/toutiao/micro", {
+    method: "POST",
+    body: JSON.stringify({
+      post_id: postId,
+      topic: topic?.trim() || null,
+    }),
+  });
 }
 
 export function listExternalRepos() {
